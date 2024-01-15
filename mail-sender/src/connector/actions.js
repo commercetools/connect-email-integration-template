@@ -1,5 +1,7 @@
 import {
   CUSTOMER_SUBSCRIPTION_MESSAGE_TYPES,
+  CUSTOMER_EMAIL_TOKEN_SUBSCRIPTION_MESSAGE_TYPES,
+  CUSTOMER_PASSWORD_TOKEN_SUBSCRIPTION_MESSAGE_TYPES,
   ORDER_SUBSCRIPTION_MESSAGE_TYPES,
 } from '../constants/constants.js';
 const EMAIL_DELIVERY_SUBSCRIPTION_KEY =
@@ -53,11 +55,29 @@ export async function createEmailDeliverySubscripition(
         },
         messages: [
           buildCustomerChangeMessageType(),
+          buildCustomerEmailTokenChangeMessageType(),
+          buildCustomerPasswordTokenChangeMessageType(),
           buildOrderChangeMessageType(),
         ],
       },
     })
     .execute();
+}
+
+function buildCustomerEmailTokenChangeMessageType() {
+  const messageType = {
+    resourceTypeId: 'customer-email-token',
+    types: CUSTOMER_EMAIL_TOKEN_SUBSCRIPTION_MESSAGE_TYPES,
+  };
+  return messageType;
+}
+
+function buildCustomerPasswordTokenChangeMessageType() {
+  const messageType = {
+    resourceTypeId: 'customer-password-token',
+    types: CUSTOMER_PASSWORD_TOKEN_SUBSCRIPTION_MESSAGE_TYPES,
+  };
+  return messageType;
 }
 
 function buildCustomerChangeMessageType() {
