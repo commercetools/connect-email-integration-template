@@ -43,7 +43,7 @@ export const messageHandler = async (request, response) => {
 
     if (decodedData) {
       const jsonData = JSON.parse(decodedData);
-      logger.info(jsonData);
+      logger.info(JSON.stringify(jsonData));
     } else {
       throw new CustomError(
         400,

@@ -4,7 +4,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 // Import routes
-import EventRoutes from './routes/event.route.js';
+import MailSendingRoutes from './routes/mail-sending.route.js';
 import { logger } from './utils/logger.utils.js';
 
 import { readConfiguration } from './utils/config.utils.js';
@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Define routes
-app.use('/', EventRoutes);
+app.use('/', MailSendingRoutes);
 
 // Global error handler
 app.use(errorMiddleware);
