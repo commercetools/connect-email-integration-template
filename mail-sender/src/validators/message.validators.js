@@ -13,20 +13,20 @@ import {
   HTTP_STATUS_SUCCESS_ACCEPTED,
 } from '../constants/http-status.constants.js';
 
-function isCustomerSubscriptionMessage(messageBody) {
+export function isCustomerSubscriptionMessage(messageBody) {
   return CUSTOMER_SUBSCRIPTION_MESSAGE_TYPES.includes(messageBody.type);
 }
-function isCustomerEmailTokenSubscriptionMessage(messageBody) {
+export function isCustomerEmailTokenSubscriptionMessage(messageBody) {
   return CUSTOMER_EMAIL_TOKEN_SUBSCRIPTION_MESSAGE_TYPES.includes(
     messageBody.type
   );
 }
-function isCustomerPasswordTokenSubscriptionMessage(messageBody) {
+export function isCustomerPasswordTokenSubscriptionMessage(messageBody) {
   return CUSTOMER_PASSWORD_TOKEN_SUBSCRIPTION_MESSAGE_TYPES.includes(
     messageBody.type
   );
 }
-function isOrderSubscriptionMessage(messageBody) {
+export function isOrderSubscriptionMessage(messageBody) {
   return ORDER_SUBSCRIPTION_MESSAGE_TYPES.includes(messageBody.type);
 }
 
