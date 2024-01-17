@@ -55,7 +55,7 @@ export function doValidation(request) {
     );
   }
 
-  if (!encodedMessageBody) {
+  if (!request.body.message.data) {
     throw new CustomError(
       HTTP_STATUS_BAD_REQUEST,
       'Bad request: Wrong No Pub/Sub message format - Missing data in body message'
