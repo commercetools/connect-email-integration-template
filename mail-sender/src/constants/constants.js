@@ -13,3 +13,5 @@ export const ORDER_SUBSCRIPTION_MESSAGE_TYPES = [
   'ReturnInfoSet',
   'ReturnInfoAdded',
 ];
+
+export const NOTIFICATION_TYPE_RESOURCE_CREATED = 'ResourceCreated';
