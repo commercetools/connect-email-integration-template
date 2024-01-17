@@ -1,5 +1,9 @@
-import CustomError from '../errors/custom.error.js';
 import { logger } from '../utils/logger.utils.js';
+import {
+  HTTP_STATUS_SUCCESS_ACCEPTED,
+  HTTP_STATUS_BAD_REQUEST,
+} from '../constants/http-status.constants.js';
+import { doValidation } from '../validators/message.validators';
 
 /**
  * Exposed event POST endpoint.
@@ -13,47 +17,17 @@ import { logger } from '../utils/logger.utils.js';
  * @returns
  */
 export const messageHandler = async (request, response) => {
-  // Check request body
+  // Send ACCEPTED acknowledgement to Subscription
+  response.status(HTTP_STATUS_SUCCESS_ACCEPTED).send();
+
   try {
-    if (!request.body) {
-      logger.error('Missing request body.');
-      throw new CustomError(
-        400,
-        'Bad request: No Pub/Sub message was received'
-      );
-    }
-
-    // Check if the body comes in a message
-    if (!request.body.message) {
-      logger.error('Missing body message');
-      throw new CustomError(
-        400,
-        'Bad request: Wrong No Pub/Sub message format'
-      );
-    }
-
-    // Receive the Pub/Sub message
-    const pubSubMessage = request.body.message;
-
-    // For our example we will use the customer id as a var
-    // and the query the commercetools sdk with that info
-    const decodedData = pubSubMessage.data
-      ? Buffer.from(pubSubMessage.data, 'base64').toString().trim()
-      : undefined;
-
-    if (decodedData) {
-      const jsonData = JSON.parse(decodedData);
-      logger.info(JSON.stringify(jsonData));
+    // Check request body
+    doValidation(request);
+  } catch (err) {
+    if (err.statusCode === HTTP_STATUS_BAD_REQUEST) {
+      logger.error(err);
     } else {
-      throw new CustomError(
-        400,
-        'Bad request: No customer id in the Pub/Sub message'
-      );
+      logger.info(err);
     }
-  } catch (error) {
-    throw new CustomError(400, `Bad request: ${error}`);
   }
-
-  // Return the response for the client
-  response.status(204).send();
 };
