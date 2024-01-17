@@ -3,7 +3,7 @@ import {
   HTTP_STATUS_SUCCESS_ACCEPTED,
   HTTP_STATUS_BAD_REQUEST,
 } from '../constants/http-status.constants.js';
-import { doValidation } from '../validators/message.validators';
+import { doValidation } from '../validators/message.validators.js';
 
 /**
  * Exposed event POST endpoint.
