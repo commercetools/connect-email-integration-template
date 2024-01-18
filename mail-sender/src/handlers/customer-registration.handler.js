@@ -1,6 +1,10 @@
 import { getCustomerById } from '../client/query.client.js';
 import GenericHandler from '../handlers/generic.handler.js';
 class CustomerRegistrationHandler extends GenericHandler {
+  constructor() {
+    super();
+  }
+
   async sendMail() {
     // TODO : Implement integration to external email service provider
   }

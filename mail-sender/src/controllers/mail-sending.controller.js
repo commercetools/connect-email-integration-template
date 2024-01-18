@@ -5,7 +5,8 @@ import {
   isCustomerSubscriptionMessage,
 } from '../validators/message.validators.js';
 import { decodeToJson } from '../utils/decoder.utils.js';
-import CustomerRegistrationHandler from '../handlers/customer-registration.handler.js';
+import HandlerFactory from '../factory/handler.factory.js';
+import { HANDLER_TYPE_CUSTOMER_REGISTRATION } from '../constants/handler-type.constants.js';
 /**
  * Exposed event POST endpoint.
  * Receives the Pub/Sub message and works with it
@@ -27,11 +28,12 @@ export const messageHandler = async (request, response) => {
 
     const encodedMessageBody = request.body.message.data;
     const messageBody = decodeToJson(encodedMessageBody);
-
+    const handlerFactory = new HandlerFactory();
+    let handler;
     if (isCustomerSubscriptionMessage(messageBody)) {
-      let customerRegistrationHandler = new CustomerRegistrationHandler();
-      await customerRegistrationHandler.process(messageBody);
+      handler = handlerFactory.getHandler(HANDLER_TYPE_CUSTOMER_REGISTRATION);
     }
+    await handler.process(messageBody);
   } catch (err) {
     if (err.statusCode !== HTTP_STATUS_SUCCESS_ACCEPTED) {
       logger.error(err);
