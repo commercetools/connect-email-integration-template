@@ -1,8 +1,7 @@
 import { getCustomerById } from '../client/query.client.js';
 import GenericHandler from '../handlers/generic.handler.js';
-import SendGridMail from '@sendgrid/mail';
-import CustomError from '../errors/custom.error.js';
 import { logger } from '../utils/logger.utils.js';
+import { send } from '../extensions/sendgrid.extension.js';
 
 class CustomerRegistrationHandler extends GenericHandler {
   constructor() {
@@ -10,28 +9,13 @@ class CustomerRegistrationHandler extends GenericHandler {
   }
 
   async sendMail(email) {
-    try {
-      SendGridMail.setApiKey(process.env.EMAIL_PROVIDER_API_KEY);
-      const msg = {
-        to: email,
-        from: process.env.SENDER_EMAIL_ADDRESS, // Provided by user
-        templateId: process.env.CUSTOMER_REGISTRATION_TEMPLATE_ID, // Provided by user
-      };
+    const from = process.env.SENDER_EMAIL_ADDRESS;
+    const templateId = process.env.CUSTOMER_REGISTRATION_TEMPLATE_ID;
 
-      await SendGridMail.send(msg);
-      logger.info(
-        `Confirmation email of customer registration has been sent to ${email}.`
-      );
-    } catch (err) {
-      const statusCode = err?.code;
-      const errors = JSON.stringify(err.response?.body?.errors);
-
-      throw new CustomError(
-        statusCode,
-        'Fail to communicate with SendGrid.',
-        errors
-      );
-    }
+    await send(email, from, templateId);
+    logger.info(
+      `Confirmation email of customer registration has been sent to ${email}.`
+    );
   }
 
   async process(messageBody) {
