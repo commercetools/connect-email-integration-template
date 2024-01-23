@@ -6,9 +6,9 @@ class HandlerFactory {
   constructor() {}
   getHandler(handlerType) {
     if (HANDLER_TYPE_CUSTOMER_REGISTRATION === handlerType) {
-      return new CustomerEmailTokenCreationHandler();
-    } else if (HANDLER_TYPE_CUSTOMER_EMAIL_TOKEN_CREATION === handlerType) {
       return new CustomerRegistrationHandler();
+    } else if (HANDLER_TYPE_CUSTOMER_EMAIL_TOKEN_CREATION === handlerType) {
+      return new CustomerEmailTokenCreationHandler();
     }
   }
 }

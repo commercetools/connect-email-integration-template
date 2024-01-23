@@ -33,7 +33,6 @@ export const messageHandler = async (request, response) => {
 
     const encodedMessageBody = request.body.message.data;
     const messageBody = decodeToJson(encodedMessageBody);
-
     const handlerFactory = new HandlerFactory();
     let handler;
     if (isCustomerSubscriptionMessage(messageBody)) {

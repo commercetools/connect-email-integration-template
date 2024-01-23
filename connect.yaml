@@ -18,7 +18,13 @@ deployAs:
           description: commercetools Composable Commerce client secret
         - key: CTP_SCOPE
           description: commercetools Composable Commerce client scope
+        - key: EMAIL_PROVIDER_API_KEY
+          description: The API key used to communicate with email provider
         - key: SENDER_EMAIL_ADDRESS
           description: sender's email address displayed in the email
         - key: CUSTOMER_REGISTRATION_TEMPLATE_ID
           description: Identifier of customer registration email template stored in email service provider
+        - key: CUSTOMER_EMAIL_TOKEN_CREATION_TEMPLATE_ID
+          description: Identifier of email token creation template stored in email service provider
+        - key: CUSTOMER_EMAIL_TOKEN_VALIDITY_IN_MINUTE
+          description: The validity of the email token in minute
