@@ -30,7 +30,8 @@ class CustomerEmailTokenCreationHandler extends GenericHandler {
         customerLastName: customer.lastName ? customer.lastName : '',
         customerCreationTime: customer.createdAt,
         customerEmailToken: generateTokenResult.value,
-        customerEmailTokenValidity: process.env.CUSTOMER_EMAIL_TOKEN_VALIDITY_IN_MINUTE
+        customerEmailTokenValidity:
+          process.env.CUSTOMER_EMAIL_TOKEN_VALIDITY_IN_MINUTE,
       };
       logger.info(
         `Ready to send verification email of customer email token creation : customerEmail=${customerDetails.customerEmail}, customerNumber=${customerDetails.customerNumber}, customerFirstName=${customerDetails.customerFirstName}, customerLastName=${customerDetails.customerLastName}, customerMiddleName=${customerDetails.customerMiddleName}, customerCreationTime=${customerDetails.customerCreationTime} `
