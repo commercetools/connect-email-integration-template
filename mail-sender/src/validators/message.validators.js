@@ -12,6 +12,13 @@ import {
   HTTP_STATUS_BAD_REQUEST,
   HTTP_STATUS_SUCCESS_ACCEPTED,
 } from '../constants/http-status.constants.js';
+import { readConfiguration } from '../utils/config.utils.js';
+
+export function isSelfCreatedChange(messageBody) {
+  const resourceModifiedBy = messageBody.createdBy?.clientId;
+  const currentConnectorClientId = readConfiguration().clientId;
+  return resourceModifiedBy === currentConnectorClientId;
+}
 
 export function isCustomerSubscriptionMessage(messageBody) {
   return CUSTOMER_SUBSCRIPTION_MESSAGE_TYPES.includes(messageBody.type);
@@ -68,7 +75,7 @@ export function doValidation(request) {
   if (NOTIFICATION_TYPE_RESOURCE_CREATED === messageBody.notificationType) {
     throw new CustomError(
       HTTP_STATUS_SUCCESS_ACCEPTED,
-      `Incoming message is about subscription resource creation. Skip handling the message`
+      `Incoming message is about subscription resource creation. Skip handling the message.`
     );
   }
 
@@ -90,6 +97,13 @@ export function doValidation(request) {
     throw new CustomError(
       HTTP_STATUS_BAD_REQUEST,
       ` No customer ID is found in message.`
+    );
+  }
+
+  if (isSelfCreatedChange(messageBody)) {
+    throw new CustomError(
+      HTTP_STATUS_SUCCESS_ACCEPTED,
+      `Incoming message (ID=${messageBody.id}) is about change of ${messageBody.type} created by the current connector. Skip handling the message.`
     );
   }
 }

@@ -8,13 +8,7 @@ export async function send(senderEmailAddress, templateId, customerDetails) {
       to: customerDetails.customerEmail,
       from: senderEmailAddress,
       templateId,
-      dynamicTemplateData: {
-        firstName: customerDetails.customerFirstName,
-        lastName: customerDetails.customerLastName,
-        middleName: customerDetails.customerMiddleName,
-        customerNumber: customerDetails.customerNumber,
-        creationTime: customerDetails.customerCreationTime,
-      },
+      dynamicTemplateData: customerDetails,
     };
     await SendGridMail.send(msg);
   } catch (err) {
