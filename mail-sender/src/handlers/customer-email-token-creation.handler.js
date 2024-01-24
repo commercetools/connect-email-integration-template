@@ -3,6 +3,8 @@ import { logger } from '../utils/logger.utils.js';
 import { send } from '../extensions/sendgrid.extension.js';
 import { getCustomerById } from '../client/query.client.js';
 import { generateEmailToken } from '../client/update.client.js';
+import CustomError from '../errors/custom.error';
+import { HTTP_STATUS_BAD_REQUEST } from '../constants/http-status.constants.js';
 
 class CustomerEmailTokenCreationHandler extends GenericHandler {
   constructor() {
@@ -39,6 +41,11 @@ class CustomerEmailTokenCreationHandler extends GenericHandler {
       await this.sendMail(senderEmailAddress, templateId, customerDetails);
       logger.info(
         `Verification email of customer email token has been sent to ${customerDetails.customerEmail}.`
+      );
+    } else {
+      throw new CustomError(
+        HTTP_STATUS_BAD_REQUEST,
+        `Unable to generate token with customer ID ${customerId}`
       );
     }
   }
