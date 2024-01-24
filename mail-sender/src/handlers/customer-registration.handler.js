@@ -19,7 +19,7 @@ class CustomerRegistrationHandler extends GenericHandler {
     const templateId = process.env.CUSTOMER_REGISTRATION_TEMPLATE_ID;
 
     const customerId = messageBody.resource.id;
-    const customer = await getCustomerById('12345');
+    const customer = await getCustomerById(customerId);
     if (customer) {
       const customerDetails = {
         customerEmail: customer.email,
