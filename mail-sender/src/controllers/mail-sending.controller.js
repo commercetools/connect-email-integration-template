@@ -4,6 +4,7 @@ import {
   doValidation,
   isCustomerSubscriptionMessage,
   isCustomerEmailTokenSubscriptionMessage,
+  isCustomerPasswordTokenSubscriptionMessage,
 } from '../validators/message.validators.js';
 import { decodeToJson } from '../utils/decoder.utils.js';
 import HandlerFactory from '../factory/handler.factory.js';
@@ -12,7 +13,6 @@ import {
   HANDLER_TYPE_CUSTOMER_EMAIL_TOKEN_CREATION,
   HANDLER_TYPE_CUSTOMER_PASSWORD_TOKEN_CREATION,
 } from '../constants/handler-type.constants.js';
-import { isCustomerPasswordTokenSubscriptionMessage } from '../validators/message.validators';
 
 /**
  * Exposed event POST endpoint.
