@@ -13,3 +13,19 @@ export async function generateEmailToken(customerId) {
     .execute()
     .then((response) => response.body);
 }
+
+export async function generatePasswordResetToken(customerId) {
+  return await createApiRoot()
+    .customers()
+    .passwordToken()
+    .post({
+      body: {
+        id: customerId,
+        ttlMinutes: Number(
+          process.env.CUSTOMER_PASSWORD_TOKEN_VALIDITY_IN_MINUTE
+        ),
+      },
+    })
+    .execute()
+    .then((response) => response.body);
+}
