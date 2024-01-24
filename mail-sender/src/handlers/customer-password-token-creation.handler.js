@@ -3,7 +3,7 @@ import { logger } from '../utils/logger.utils.js';
 import { send } from '../extensions/sendgrid.extension.js';
 import { getCustomerById } from '../client/query.client.js';
 import { generatePasswordResetToken } from '../client/update.client.js';
-import CustomError from '../errors/custom.error';
+import CustomError from '../errors/custom.error.js';
 import { HTTP_STATUS_BAD_REQUEST } from '../constants/http-status.constants.js';
 
 class CustomerPasswordTokenCreationHandler extends GenericHandler {
@@ -17,11 +17,13 @@ class CustomerPasswordTokenCreationHandler extends GenericHandler {
 
   async process(messageBody) {
     const senderEmailAddress = process.env.SENDER_EMAIL_ADDRESS;
-    const templateId = process.env.CUSTOMER_EMAIL_TOKEN_CREATION_TEMPLATE_ID;
+    const templateId = process.env.CUSTOMER_PASSWORD_TOKEN_CREATION_TEMPLATE_ID;
 
     const customerId = messageBody.customerId;
     const customer = await getCustomerById(customerId);
-    const generateTokenResult = await generatePasswordResetToken(customerId);
+    const generateTokenResult = await generatePasswordResetToken(
+      customer.email
+    );
 
     if (generateTokenResult) {
       const customerDetails = {
