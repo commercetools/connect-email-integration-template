@@ -37,6 +37,10 @@ export function isOrderSubscriptionMessage(messageBody) {
   return ORDER_SUBSCRIPTION_MESSAGE_TYPES.includes(messageBody.type);
 }
 
+export function isOrderConfirmationMessage(messageBody) {
+  return ORDER_SUBSCRIPTION_MESSAGE_TYPES.includes(messageBody.type);
+}
+
 function isValidMessageType(messageBody) {
   return (
     isCustomerSubscriptionMessage(messageBody) ||
