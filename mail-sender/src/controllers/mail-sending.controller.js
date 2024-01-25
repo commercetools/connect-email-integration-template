@@ -4,12 +4,14 @@ import {
   doValidation,
   isCustomerSubscriptionMessage,
   isCustomerEmailTokenSubscriptionMessage,
+  isCustomerPasswordTokenSubscriptionMessage,
 } from '../validators/message.validators.js';
 import { decodeToJson } from '../utils/decoder.utils.js';
 import HandlerFactory from '../factory/handler.factory.js';
 import {
   HANDLER_TYPE_CUSTOMER_REGISTRATION,
   HANDLER_TYPE_CUSTOMER_EMAIL_TOKEN_CREATION,
+  HANDLER_TYPE_CUSTOMER_PASSWORD_TOKEN_CREATION,
 } from '../constants/handler-type.constants.js';
 
 /**
@@ -40,6 +42,10 @@ export const messageHandler = async (request, response) => {
     } else if (isCustomerEmailTokenSubscriptionMessage(messageBody)) {
       handler = handlerFactory.getHandler(
         HANDLER_TYPE_CUSTOMER_EMAIL_TOKEN_CREATION
+      );
+    } else if (isCustomerPasswordTokenSubscriptionMessage(messageBody)) {
+      handler = handlerFactory.getHandler(
+        HANDLER_TYPE_CUSTOMER_PASSWORD_TOKEN_CREATION
       );
     }
     await handler.process(messageBody);

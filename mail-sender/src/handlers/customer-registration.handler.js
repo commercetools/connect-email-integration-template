@@ -2,8 +2,8 @@ import { getCustomerById } from '../client/query.client.js';
 import GenericHandler from '../handlers/generic.handler.js';
 import { logger } from '../utils/logger.utils.js';
 import { send } from '../extensions/sendgrid.extension.js';
-import CustomError from '../errors/custom.error';
-import { HTTP_STATUS_BAD_REQUEST } from '../constants/http-status.constants';
+import CustomError from '../errors/custom.error.js';
+import { HTTP_STATUS_BAD_REQUEST } from '../constants/http-status.constants.js';
 
 class CustomerRegistrationHandler extends GenericHandler {
   constructor() {
@@ -19,7 +19,7 @@ class CustomerRegistrationHandler extends GenericHandler {
     const templateId = process.env.CUSTOMER_REGISTRATION_TEMPLATE_ID;
 
     const customerId = messageBody.resource.id;
-    const customer = await getCustomerById('12345');
+    const customer = await getCustomerById(customerId);
     if (customer) {
       const customerDetails = {
         customerEmail: customer.email,
