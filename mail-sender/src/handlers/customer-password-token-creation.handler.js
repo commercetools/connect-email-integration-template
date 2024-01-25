@@ -59,7 +59,12 @@ class CustomerPasswordTokenCreationHandler extends GenericHandler {
       logger.info(
         `Ready to send password reset email : customerEmail=${customerDetails.customerEmail}, customerNumber=${customerDetails.customerNumber}, customerFirstName=${customerDetails.customerFirstName}, customerLastName=${customerDetails.customerLastName}, customerMiddleName=${customerDetails.customerMiddleName}, customerCreationTime=${customerDetails.customerCreationTime} `
       );
-      await this.sendMail(senderEmailAddress, templateId, customerDetails);
+      await this.sendMail(
+        senderEmailAddress,
+        customer.email,
+        templateId,
+        customerDetails
+      );
       logger.info(
         `Password reset email has been sent to ${customerDetails.customerEmail}.`
       );

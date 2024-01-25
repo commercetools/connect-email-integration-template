@@ -33,7 +33,12 @@ class CustomerRegistrationHandler extends GenericHandler {
       logger.info(
         `Ready to send confirmation email of customer registration : customerEmail=${customerDetails.customerEmail}, customerNumber=${customerDetails.customerNumber}, customerFirstName=${customerDetails.customerFirstName}, customerLastName=${customerDetails.customerLastName}, customerMiddleName=${customerDetails.customerMiddleName}, customerCreationTime=${customerDetails.customerCreationTime} `
       );
-      await this.sendMail(senderEmailAddress, templateId, customerDetails);
+      await this.sendMail(
+        senderEmailAddress,
+        customer.email,
+        templateId,
+        customerDetails
+      );
       logger.info(
         `Confirmation email of customer registration has been sent to ${customerDetails.customerEmail}.`
       );
