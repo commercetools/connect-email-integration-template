@@ -38,6 +38,7 @@ class OrderConfirmationHandler extends GenericHandler {
       }
 
       const orderLineItems = [];
+
       for (const lineItem of order.lineItems) {
         const item = {
           productName: lineItem.name,
@@ -51,7 +52,9 @@ class OrderConfirmationHandler extends GenericHandler {
 
       const orderDetails = {
         orderNumber: order.orderNumber ? order.orderNumber : '',
-        customerEmail: order.customerEmail,
+        customerEmail: order.customerEmail
+          ? order.customerEmail
+          : customer.customerEmail,
         customerFirstName: customer?.firstName
           ? customer.firstName
           : 'Customer',
@@ -59,7 +62,9 @@ class OrderConfirmationHandler extends GenericHandler {
         customerLastName: customer?.lastName ? customer.lastName : '',
         orderCreationTime: order.createdAt,
         orderTotalPrice: convertMoneyToText(order.totalPrice),
-        orderTaxedPrice: convertMoneyToText(order.taxedPrice),
+        orderTaxedPrice: order.taxedPrice
+          ? convertMoneyToText(order.taxedPrice)
+          : '',
         orderLineItems,
       };
 
@@ -68,13 +73,13 @@ class OrderConfirmationHandler extends GenericHandler {
       );
       await this.sendMail(
         senderEmailAddress,
-        order.customerEmail,
+        orderDetails.customerEmail,
         templateId,
         orderDetails
       );
-      // logger.info(
-      //     `Confirmation email of customer registration has been sent to ${customerDetails.customerEmail}.`
-      // );
+      logger.info(
+        `Confirmation email of customer registration has been sent to ${orderDetails.customerEmail}.`
+      );
     } else if (!order) {
       throw new CustomError(
         HTTP_STATUS_BAD_REQUEST,
