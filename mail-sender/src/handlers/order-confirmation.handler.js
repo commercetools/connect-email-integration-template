@@ -5,7 +5,11 @@ import CustomError from '../errors/custom.error.js';
 import { HTTP_STATUS_BAD_REQUEST } from '../constants/http-status.constants.js';
 import { send } from '../extensions/sendgrid.extension.js';
 import { convertMoneyToText } from '../utils/money.utils.js';
+import { addImageSizeSuffix } from '../utils/image.utils.js';
+import { IMAGE_SIZE_SMALL } from '../constants/image.constants.js';
 
+const DEFAULT_LOCALE = 'en-US';
+const DEFAULT_CUSTOMER_NAME = 'Customer';
 class OrderConfirmationHandler extends GenericHandler {
   constructor() {
     super();
@@ -41,23 +45,27 @@ class OrderConfirmationHandler extends GenericHandler {
 
       for (const lineItem of order.lineItems) {
         const item = {
-          productName: lineItem.name,
+          productName: lineItem.name[DEFAULT_LOCALE],
           productQuantity: lineItem.quantity,
           productSku: lineItem.variant.sku,
-          productImage: lineItem.variant.images[0],
+          productImage: lineItem.variant.images[0]
+            ? addImageSizeSuffix(
+                lineItem.variant.images[0].url,
+                IMAGE_SIZE_SMALL
+              )
+            : '',
           productSubTotal: convertMoneyToText(lineItem.totalPrice),
         };
         orderLineItems.push(item);
       }
-
       const orderDetails = {
         orderNumber: order.orderNumber ? order.orderNumber : '',
         customerEmail: order.customerEmail
           ? order.customerEmail
-          : customer.customerEmail,
+          : customer.email,
         customerFirstName: customer?.firstName
           ? customer.firstName
-          : 'Customer',
+          : DEFAULT_CUSTOMER_NAME,
         customerMiddleName: customer?.middleName ? customer.middleName : '',
         customerLastName: customer?.lastName ? customer.lastName : '',
         orderCreationTime: order.createdAt,
