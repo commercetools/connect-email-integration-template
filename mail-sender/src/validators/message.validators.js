@@ -7,6 +7,8 @@ import {
   NOTIFICATION_TYPE_RESOURCE_CREATED,
   ORDER_CREATION_SUBSCRIPTION_MESSAGE_TYPE,
   ORDER_IMPORT_SUBSCRIPTION_MESSAGE_TYPE,
+  ORDER_STATE_CHANGE_SUBSCRIPTION_MESSAGE_TYPE,
+  ORDER_SHIPMENT_STATE_CHANGE_SUBSCRIPTION_MESSAGE_TYPE,
 } from '../constants/constants.js';
 
 import { decodeToJson } from '../utils/decoder.utils.js';
@@ -43,6 +45,13 @@ export function isOrderConfirmationMessage(messageBody) {
   return [
     ORDER_CREATION_SUBSCRIPTION_MESSAGE_TYPE,
     ORDER_IMPORT_SUBSCRIPTION_MESSAGE_TYPE,
+  ].includes(messageBody.type);
+}
+
+export function isOrderStateChangeMessage(messageBody) {
+  return [
+    ORDER_STATE_CHANGE_SUBSCRIPTION_MESSAGE_TYPE,
+    ORDER_SHIPMENT_STATE_CHANGE_SUBSCRIPTION_MESSAGE_TYPE,
   ].includes(messageBody.type);
 }
 
