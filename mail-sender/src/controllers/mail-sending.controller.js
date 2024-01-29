@@ -5,6 +5,7 @@ import {
   isCustomerSubscriptionMessage,
   isCustomerEmailTokenSubscriptionMessage,
   isCustomerPasswordTokenSubscriptionMessage,
+  isOrderConfirmationMessage,
 } from '../validators/message.validators.js';
 import { decodeToJson } from '../utils/decoder.utils.js';
 import HandlerFactory from '../factory/handler.factory.js';
@@ -12,6 +13,7 @@ import {
   HANDLER_TYPE_CUSTOMER_REGISTRATION,
   HANDLER_TYPE_CUSTOMER_EMAIL_TOKEN_CREATION,
   HANDLER_TYPE_CUSTOMER_PASSWORD_TOKEN_CREATION,
+  HANDLER_TYPE_ORDER_CONFIRMATION,
 } from '../constants/handler-type.constants.js';
 
 /**
@@ -47,6 +49,8 @@ export const messageHandler = async (request, response) => {
       handler = handlerFactory.getHandler(
         HANDLER_TYPE_CUSTOMER_PASSWORD_TOKEN_CREATION
       );
+    } else if (isOrderConfirmationMessage(messageBody)) {
+      handler = handlerFactory.getHandler(HANDLER_TYPE_ORDER_CONFIRMATION);
     }
     await handler.process(messageBody);
   } catch (err) {

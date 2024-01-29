@@ -47,9 +47,14 @@ class CustomerEmailTokenCreationHandler extends GenericHandler {
         customerEmailTokenValidity: tokenValidityInMinute,
       };
       logger.info(
-        `Ready to send verification email of customer email token creation : customerEmail=${customerDetails.customerEmail}, customerNumber=${customerDetails.customerNumber}, customerFirstName=${customerDetails.customerFirstName}, customerLastName=${customerDetails.customerLastName}, customerMiddleName=${customerDetails.customerMiddleName}, customerCreationTime=${customerDetails.customerCreationTime} `
+        `Ready to send verification email of customer email token creation : customerEmail=${customerDetails.customerEmail}, customerNumber=${customerDetails.customerNumber}, customerCreationTime=${customerDetails.customerCreationTime} `
       );
-      await this.sendMail(senderEmailAddress, templateId, customerDetails);
+      await this.sendMail(
+        senderEmailAddress,
+        customer.email,
+        templateId,
+        customerDetails
+      );
       logger.info(
         `Verification email of customer email token has been sent to ${customerDetails.customerEmail}.`
       );

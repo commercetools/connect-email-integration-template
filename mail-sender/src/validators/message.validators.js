@@ -5,6 +5,8 @@ import {
   CUSTOMER_PASSWORD_TOKEN_SUBSCRIPTION_MESSAGE_TYPES,
   ORDER_SUBSCRIPTION_MESSAGE_TYPES,
   NOTIFICATION_TYPE_RESOURCE_CREATED,
+  ORDER_CREATION_SUBSCRIPTION_MESSAGE_TYPE,
+  ORDER_IMPORT_SUBSCRIPTION_MESSAGE_TYPE,
 } from '../constants/constants.js';
 
 import { decodeToJson } from '../utils/decoder.utils.js';
@@ -35,6 +37,13 @@ export function isCustomerPasswordTokenSubscriptionMessage(messageBody) {
 }
 export function isOrderSubscriptionMessage(messageBody) {
   return ORDER_SUBSCRIPTION_MESSAGE_TYPES.includes(messageBody.type);
+}
+
+export function isOrderConfirmationMessage(messageBody) {
+  return [
+    ORDER_CREATION_SUBSCRIPTION_MESSAGE_TYPE,
+    ORDER_IMPORT_SUBSCRIPTION_MESSAGE_TYPE,
+  ].includes(messageBody.type);
 }
 
 function isValidMessageType(messageBody) {
@@ -98,6 +107,21 @@ export function doValidation(request) {
       HTTP_STATUS_BAD_REQUEST,
       ` No customer ID is found in message.`
     );
+  }
+
+  if (isOrderSubscriptionMessage(messageBody)) {
+    if (resourceTypeId !== 'order' || !resourceId) {
+      throw new CustomError(
+        HTTP_STATUS_BAD_REQUEST,
+        ` No order ID is found in message.`
+      );
+    }
+    if (!messageBody.order?.customerId && !messageBody.order?.customerEmail) {
+      throw new CustomError(
+        HTTP_STATUS_SUCCESS_ACCEPTED,
+        `Order (ID=${resourceId}) does not link to any customer contact. Skip handling the message.`
+      );
+    }
   }
 
   if (isSelfCreatedChange(messageBody)) {
