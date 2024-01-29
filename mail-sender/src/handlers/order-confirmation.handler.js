@@ -77,7 +77,7 @@ class OrderConfirmationHandler extends GenericHandler {
       };
 
       logger.info(
-        `Ready to send order confirmation email of customer registration : customerEmail=${orderDetails.customerEmail}, orderNumber=${orderDetails.orderNumber}, customerFirstName=${orderDetails.customerFirstName}, customerLastName=${orderDetails.customerLastName}, customerMiddleName=${orderDetails.customerMiddleName}, customerCreationTime=${orderDetails.orderCreationTime}, orderTotalPrice=${orderDetails.orderTotalPrice}, orderTaxedPrice=${orderDetails.orderTaxedPrice} `
+        `Ready to send order confirmation email of customer registration : customerEmail=${orderDetails.customerEmail}, orderNumber=${orderDetails.orderNumber}, customerMiddleName=${orderDetails.customerMiddleName}, customerCreationTime=${orderDetails.orderCreationTime}`
       );
       await this.sendMail(
         senderEmailAddress,
