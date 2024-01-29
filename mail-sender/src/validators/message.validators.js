@@ -125,7 +125,11 @@ export function doValidation(request) {
         ` No order ID is found in message.`
       );
     }
-    if (!messageBody.order?.customerId && !messageBody.order?.customerEmail) {
+    if (
+      messageBody.order &&
+      !messageBody.order?.customerId &&
+      !messageBody.order?.customerEmail
+    ) {
       throw new CustomError(
         HTTP_STATUS_SUCCESS_ACCEPTED,
         `Order (ID=${resourceId}) does not link to any customer contact. Skip handling the message.`

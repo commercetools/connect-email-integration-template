@@ -69,6 +69,8 @@ class OrderStateChangeHandler extends GenericHandler {
         customerMiddleName: customer?.middleName ? customer.middleName : '',
         customerLastName: customer?.lastName ? customer.lastName : '',
         orderCreationTime: order.createdAt,
+        orderState: order.orderState,
+        orderShipmentState: order.shipmentState,
         orderTotalPrice: convertMoneyToText(order.totalPrice),
         orderTaxedPrice: order.taxedPrice
           ? convertMoneyToText(order.taxedPrice)
