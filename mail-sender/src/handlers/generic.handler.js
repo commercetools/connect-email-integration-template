@@ -1,6 +1,6 @@
 import CustomError from '../errors/custom.error.js';
 import { HTTP_STATUS_SERVER_ERROR } from '../constants/http-status.constants.js';
-import { send } from '../extensions/sendgrid.extension.js';
+import { logger } from '../utils/logger.utils.js';
 
 class GenericHandler {
   async sendMail(
@@ -9,12 +9,11 @@ class GenericHandler {
     templateId,
     templateData
   ) {
-    await send(
-      senderEmailAddress,
-      recipientEmailAddress,
-      templateId,
-      templateData
-    );
+    logger.info(`senderEmailAddress: ${senderEmailAddress}`);
+    logger.info(`recipientEmailAddress: ${recipientEmailAddress}`);
+    logger.info(`templateId: ${templateId}`);
+    logger.info(`templateData: ${templateData}`);
+    // Implement the invocation to SDK supplied by email service provider
   }
 
   process() {
