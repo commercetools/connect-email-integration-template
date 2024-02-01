@@ -25,8 +25,12 @@ deployAs:
         - key: CUSTOMER_REGISTRATION_TEMPLATE_ID
           description: Identifier of customer registration email template stored in email service provider
         - key: CUSTOMER_EMAIL_TOKEN_CREATION_TEMPLATE_ID
-          description: Identifier of email token creation template stored in email service provider
+          description: Identifier of email token creation email template stored in email service provider
         - key: CUSTOMER_PASSWORD_TOKEN_CREATION_TEMPLATE_ID
-          description: Identifier of password token creation template stored in email service provider
+          description: Identifier of password token creation email template stored in email service provider
         - key: ORDER_CONFIRMATION_TEMPLATE_ID
-          description: Identifier of order confirmation template stored in email service provider
+          description: Identifier of order confirmation email template stored in email service provider
+        - key: ORDER_STATE_CHANGE_TEMPLATE_ID
+          description: Identifier of order state change / shipment state change email template stored in email service provider
+        - key: ORDER_REFUND_TEMPLATE_ID
+          description: Identifier of order refund email template stored in email service provider
