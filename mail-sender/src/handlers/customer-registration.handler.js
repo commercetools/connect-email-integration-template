@@ -1,17 +1,12 @@
 import { getCustomerById } from '../client/query.client.js';
 import GenericHandler from '../handlers/generic.handler.js';
 import { logger } from '../utils/logger.utils.js';
-import { send } from '../extensions/sendgrid.extension.js';
 import CustomError from '../errors/custom.error.js';
 import { HTTP_STATUS_BAD_REQUEST } from '../constants/http-status.constants.js';
 
 class CustomerRegistrationHandler extends GenericHandler {
   constructor() {
     super();
-  }
-
-  async sendMail(senderEmailAddress, templateId, customerDetails) {
-    await send(senderEmailAddress, templateId, customerDetails);
   }
 
   async process(messageBody) {
@@ -33,7 +28,7 @@ class CustomerRegistrationHandler extends GenericHandler {
       logger.info(
         `Ready to send confirmation email of customer registration : customerEmail=${customerDetails.customerEmail}, customerNumber=${customerDetails.customerNumber},  customerCreationTime=${customerDetails.customerCreationTime} `
       );
-      await this.sendMail(
+      await super.sendMail(
         senderEmailAddress,
         customer.email,
         templateId,

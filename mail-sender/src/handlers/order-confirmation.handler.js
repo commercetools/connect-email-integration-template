@@ -3,7 +3,6 @@ import { logger } from '../utils/logger.utils.js';
 import { getOrderById, getCustomerById } from '../client/query.client.js';
 import CustomError from '../errors/custom.error.js';
 import { HTTP_STATUS_BAD_REQUEST } from '../constants/http-status.constants.js';
-import { send } from '../extensions/sendgrid.extension.js';
 import { convertMoneyToText } from '../utils/money.utils.js';
 import { addImageSizeSuffix } from '../utils/image.utils.js';
 import { IMAGE_SIZE_SMALL } from '../constants/image.constants.js';
@@ -13,19 +12,6 @@ const DEFAULT_CUSTOMER_NAME = 'Customer';
 class OrderConfirmationHandler extends GenericHandler {
   constructor() {
     super();
-  }
-  async sendMail(
-    senderEmailAddress,
-    receiverEmailAddress,
-    templateId,
-    orderDetails
-  ) {
-    await send(
-      senderEmailAddress,
-      receiverEmailAddress,
-      templateId,
-      orderDetails
-    );
   }
 
   async process(messageBody) {
@@ -79,7 +65,7 @@ class OrderConfirmationHandler extends GenericHandler {
       logger.info(
         `Ready to send order confirmation email of customer registration : customerEmail=${orderDetails.customerEmail}, orderNumber=${orderDetails.orderNumber}, customerMiddleName=${orderDetails.customerMiddleName}, customerCreationTime=${orderDetails.orderCreationTime}`
       );
-      await this.sendMail(
+      await super.sendMail(
         senderEmailAddress,
         orderDetails.customerEmail,
         templateId,

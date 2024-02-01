@@ -1,6 +1,5 @@
 import GenericHandler from '../handlers/generic.handler.js';
 import { logger } from '../utils/logger.utils.js';
-import { send } from '../extensions/sendgrid.extension.js';
 import { getCustomerById } from '../client/query.client.js';
 import { generatePasswordResetToken } from '../client/update.client.js';
 import CustomError from '../errors/custom.error.js';
@@ -9,10 +8,6 @@ import { getTimeDiffInMinute } from '../utils/date.utils.js';
 class CustomerPasswordTokenCreationHandler extends GenericHandler {
   constructor() {
     super();
-  }
-
-  async sendMail(senderEmailAddress, templateId, customerDetails) {
-    await send(senderEmailAddress, templateId, customerDetails);
   }
 
   async process(messageBody) {
@@ -59,7 +54,7 @@ class CustomerPasswordTokenCreationHandler extends GenericHandler {
       logger.info(
         `Ready to send password reset email : customerEmail=${customerDetails.customerEmail}, customerNumber=${customerDetails.customerNumber}, customerCreationTime=${customerDetails.customerCreationTime} `
       );
-      await this.sendMail(
+      await super.sendMail(
         senderEmailAddress,
         customer.email,
         templateId,
