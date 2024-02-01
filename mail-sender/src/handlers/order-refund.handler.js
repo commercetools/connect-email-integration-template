@@ -44,7 +44,7 @@ class OrderRefundHandler extends GenericHandler {
       orderTaxedPrice: order.taxedPrice
         ? convertMoneyToText(order.taxedPrice)
         : '',
-      returnedLineItems,
+      orderLineItems : returnedLineItems,
     };
   }
 
