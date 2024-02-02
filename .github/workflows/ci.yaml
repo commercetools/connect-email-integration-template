@@ -29,3 +29,6 @@ jobs:
 
       - name: Check the coding style
         run: npm run lint && npm run prettier:check
+
+      - name: Execute tests
+        run: npm run test:ci
