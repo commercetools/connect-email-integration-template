@@ -18,8 +18,6 @@ The commercetools Subscription would be cleared once the email integration conne
 Please specify your desired key for creation of commercetools Subscription [here](https://github.com/commercetools/connect-email-integration-template/blob/80f96ab78a3c9a9402f4a16b2e15b7875b1355a0/mail-sender/src/connector/actions.js#L8).
 The default key is 'ct-connect-email-delivery-subscription'.
 
-#### Install your email-provider SDK 
-Please run following npm command under mail-sender folder to install the NodeJS SDK provided by email service provider.
 
 #### Customize parameters for email template ####
 In mail-sender we have already provided default parameters as below based on different operations. These parameters act as data to be inserted into email template for notification.
@@ -73,30 +71,80 @@ Password Reset Token Creation
 
 Order Confirmation 
 ``` 
-┌-------------------------------------------------------------------------------------------------------------------------------------------┐
-|   Parameters                          |   Description                                                                                     |
-|---------------------------------------|---------------------------------------------------------------------------------------------------|
-|   orderNumber                         |   Recipient email address                                                                         |
-|   customerEmail                       |   Email address of customer                                                                       |
-|   customerFirstName                   |   First name of the customer                                                                      |
-|   customerMiddleName                  |   Middle name of the customer                                                                     |
-|   customerLastName                    |   Last name of the customer                                                                       |
-|   orderCreationTime                   |   Date and time of the order creation                                                             |
-|   orderTotalPrice                     |   The total price of the order                                                                    |
-|   orderTaxedPrice                     |   The price of the order after the tax calculation                                                |
-|   orderLineItems                      |   A list of line items included in the specific order                                             |
-|   orderLineItems[n].productName       |   Product name in English of the line item                                                        |
-|   orderLineItem[n].productQuantity    |   The  quantity of the ordered line item                                                          |
-|   orderLineItem[n].productSku         |   The SKU of the ordered line item                                                                |
-|   orderLineItem[n].productImage       |   The image URL of the ordered line item. The default image would be in small size.               |
-|                                       |   For details, please refer to [doc](https://docs.commercetools.com/api/projects/products#image)  |
-|   orderLineItems[n].productSubTotal   |   The subtotal price of the line item                                                             |
-└-------------------------------------------------------------------------------------------------------------------------------------------┘ 
+┌------------------------------------------------------------------------------------------------------------------------------------------------┐
+|   Parameters                               |   Description                                                                                     |
+|--------------------------------------------|---------------------------------------------------------------------------------------------------|
+|   orderNumber                              |   Recipient email address                                                                         |
+|   customerEmail                            |   Email address of customer linked to the order                                                   |
+|   customerFirstName                        |   First name of the customer                                                                      |
+|   customerMiddleName                       |   Middle name of the customer                                                                     |
+|   customerLastName                         |   Last name of the customer                                                                       |
+|   orderCreationTime                        |   Date and time of the order creation                                                             |
+|   orderTotalPrice                          |   The total price of the order                                                                    |
+|   orderTaxedPrice                          |   The price of the order after the tax calculation                                                |
+|   orderLineItems                           |   A list of line items included in the specific order                                             |
+|       orderLineItems[n].productName        |   Product name in English of the line item                                                        |
+|       orderLineItems[n].productQuantity    |   The  quantity of the ordered line item                                                          |
+|       orderLineItems[n].productSku         |   The SKU of the ordered line item                                                                |
+|       orderLineItems[n].productImage       |   The image URL of the ordered line item. The default image would be in small size.               |
+|                                            |   For details, please refer to https://docs.commercetools.com/api/projects/products#image         |
+|       orderLineItems[n].productSubTotal    |   The subtotal price of the line item                                                             |
+└------------------------------------------------------------------------------------------------------------------------------------------------┘ 
 ```
 
- 
+
+Order/Shipment State Change 
+``` 
+┌-----------------------------------------------------------------------------------------------------------------------------------------------┐
+|   Parameters                              |   Description                                                                                     |
+|-------------------------------------------|---------------------------------------------------------------------------------------------------|
+|   orderNumber                             |   Recipient email address                                                                         |
+|   customerEmail                           |   Email address of customer linked to the order                                                   |
+|   customerFirstName                       |   First name of the customer                                                                      |
+|   customerMiddleName                      |   Middle name of the customer                                                                     |
+|   customerLastName                        |   Last name of the customer                                                                       |
+|   orderCreationTime                       |   Date and time of the order creation                                                             |
+|   orderState                              |   Current state of the order                                                                      |
+|   orderShipmentState                      |   Current state of the shipment                                                                   |
+|   orderTotalPrice                         |   The total price of the order                                                                    |
+|   orderTaxedPrice                         |   The price of the order after the tax calculation                                                |
+|   orderLineItems                          |   A list of line items included in the specific order                                             |
+|       orderLineItems[n].productName       |   Product name in English of the line item                                                        |
+|       orderLineItems[n].productQuantity   |   The  quantity of the ordered line item                                                          |
+|       orderLineItems[n].productSku        |   The SKU of the ordered line item                                                                |
+|       orderLineItems[n].productImage      |   The image URL of the ordered line item. The default image would be in small size.               |
+|       orderLineItems[n].productSubTotal   |   The subtotal price of the line item                                                             |
+└-----------------------------------------------------------------------------------------------------------------------------------------------┘ 
 ```
-$ npm install <tax-provider-sdk>
+
+Order Refund 
+``` 
+┌--------------------------------------------------------------------------------------------------------------------------------------------┐
+|   Parameters                               |   Description                                                                                 |
+|--------------------------------------------|-----------------------------------------------------------------------------------------------|
+|   orderNumber                              |   Recipient email address                                                                     |
+|   customerEmail                            |   Email address of customer linked to the order                                               |
+|   customerFirstName                        |   First name of the customer                                                                  |
+|   customerMiddleName                       |   Middle name of the customer                                                                 |
+|   customerLastName                         |   Last name of the customer                                                                   |
+|   orderCreationTime                        |   Date and time of the order creation                                                         |
+|   orderTotalPrice                          |   The total price of the order                                                                |
+|   orderTaxedPrice                          |   The price of the order after the tax calculation                                            |
+|   orderLineItems                           |   A list of line items included in the specific order which is going to be returned           |
+|       orderLineItems[n].productName        |   Product name in English of the line item                                                    |
+|       orderLineItems[n].productQuantity    |   The  quantity of the ordered line item                                                      |
+|       orderLineItems[n].productSku         |   The SKU of the ordered line item                                                            |
+|       orderLineItems[n].productImage       |   The image URL of the ordered line item. The default image would be in small size.           |
+|       orderLineItems[n].productSubTotal    |   The subtotal price of the line item                                                         |
+└--------------------------------------------------------------------------------------------------------------------------------------------┘ 
+```
+
+To display values of these parameters during email notification, the email templates in email service provider should contain placeholders with the same parameter names, so that the above values can be inserted into email templates. 
+
+#### Install your email-provider SDK 
+Please run following npm command under mail-sender folder to install the NodeJS SDK provided by email service provider.
+```
+$ npm install <email-service-provider-sdk>
 ```
 #### Install dependencies
 ```
