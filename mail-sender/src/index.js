@@ -7,7 +7,7 @@ import bodyParser from 'body-parser';
 import MailSendingRoutes from './routes/mail-sending.route.js';
 import { logger } from './utils/logger.utils.js';
 
-import { readConfiguration } from './utils/config.utils.js';
+import readConfiguration from './utils/config.utils.js';
 import { errorMiddleware } from './middleware/error.middleware.js';
 
 // Read env variables
