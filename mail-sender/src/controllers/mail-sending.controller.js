@@ -3,10 +3,23 @@ import { HTTP_STATUS_SUCCESS_ACCEPTED } from '../constants/http-status.constants
 import {
   doValidation,
   isCustomerSubscriptionMessage,
+  isCustomerEmailTokenSubscriptionMessage,
+  isCustomerPasswordTokenSubscriptionMessage,
+  isOrderConfirmationMessage,
+  isOrderStateChangeMessage,
+  isOrderRefundMessage,
 } from '../validators/message.validators.js';
 import { decodeToJson } from '../utils/decoder.utils.js';
 import HandlerFactory from '../factory/handler.factory.js';
-import { HANDLER_TYPE_CUSTOMER_REGISTRATION } from '../constants/handler-type.constants.js';
+import {
+  HANDLER_TYPE_CUSTOMER_REGISTRATION,
+  HANDLER_TYPE_CUSTOMER_EMAIL_TOKEN_CREATION,
+  HANDLER_TYPE_CUSTOMER_PASSWORD_TOKEN_CREATION,
+  HANDLER_TYPE_ORDER_CONFIRMATION,
+  HANDLER_TYPE_ORDER_STATE_CHANGE,
+  HANDLER_TYPE_ORDER_REFUND,
+} from '../constants/handler-type.constants.js';
+
 /**
  * Exposed event POST endpoint.
  * Receives the Pub/Sub message and works with it
@@ -32,6 +45,20 @@ export const messageHandler = async (request, response) => {
     let handler;
     if (isCustomerSubscriptionMessage(messageBody)) {
       handler = handlerFactory.getHandler(HANDLER_TYPE_CUSTOMER_REGISTRATION);
+    } else if (isCustomerEmailTokenSubscriptionMessage(messageBody)) {
+      handler = handlerFactory.getHandler(
+        HANDLER_TYPE_CUSTOMER_EMAIL_TOKEN_CREATION
+      );
+    } else if (isCustomerPasswordTokenSubscriptionMessage(messageBody)) {
+      handler = handlerFactory.getHandler(
+        HANDLER_TYPE_CUSTOMER_PASSWORD_TOKEN_CREATION
+      );
+    } else if (isOrderConfirmationMessage(messageBody)) {
+      handler = handlerFactory.getHandler(HANDLER_TYPE_ORDER_CONFIRMATION);
+    } else if (isOrderStateChangeMessage(messageBody)) {
+      handler = handlerFactory.getHandler(HANDLER_TYPE_ORDER_STATE_CHANGE);
+    } else if (isOrderRefundMessage(messageBody)) {
+      handler = handlerFactory.getHandler(HANDLER_TYPE_ORDER_REFUND);
     }
     await handler.process(messageBody);
   } catch (err) {
