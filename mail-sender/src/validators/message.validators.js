@@ -18,7 +18,7 @@ import {
   HTTP_STATUS_BAD_REQUEST,
   HTTP_STATUS_SUCCESS_ACCEPTED,
 } from '../constants/http-status.constants.js';
-import { readConfiguration } from '../utils/config.utils.js';
+import readConfiguration from '../utils/config.utils.js';
 
 export function isSelfCreatedChange(messageBody) {
   const resourceModifiedBy = messageBody.createdBy?.clientId;
