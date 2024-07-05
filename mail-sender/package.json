@@ -38,6 +38,6 @@
     "mocha": "^10.2.0",
     "sinon": "^17.0.1",
     "supertest": "^6.3.4",
-    "validator": "^13.11.0"
+    "validator": "^13.12.0"
   }
 }
