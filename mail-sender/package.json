@@ -37,7 +37,7 @@
     "express": "^4.19.2",
     "mocha": "^10.6.0",
     "sinon": "^18.0.0",
-    "supertest": "^6.3.4",
+    "supertest": "^7.0.0",
     "validator": "^13.12.0"
   }
 }
