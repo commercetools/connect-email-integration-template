@@ -22,14 +22,11 @@ class OrderConfirmationHandler extends GenericHandler {
 
     const orderId = messageBody.resource.id;
     const order = await getOrderById(orderId);
-    console.log('order', order);
     if (order) {
       let customer;
       if (order.customerId) {
         customer = await getCustomerById(order.customerId);
       }
-
-      console.log('customer', customer);
 
       const orderLineItems = [];
 
