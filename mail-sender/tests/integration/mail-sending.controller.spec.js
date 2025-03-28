@@ -2,7 +2,10 @@ import { expect, describe, afterAll, it } from '@jest/globals';
 import request from 'supertest';
 import server from '../../src/index.js';
 import { encodeJsonObject } from './utils/encoder.utils.js';
-import { HTTP_STATUS_SUCCESS_ACCEPTED } from '../../src/constants/http-status.constants.js';
+import {
+  HTTP_STATUS_BAD_REQUEST,
+  HTTP_STATUS_SUCCESS_ACCEPTED,
+} from '../../src/constants/http-status.constants.js';
 
 /** Reminder : Please put mandatory environment variables in the settings of your github repository **/
 describe('mail-sending.controller.spec', () => {
@@ -22,7 +25,7 @@ describe('mail-sending.controller.spec', () => {
     response = await request(server).post(`/mailSender`).send(payload);
 
     expect(response).toBeDefined();
-    expect(response.statusCode).toEqual(HTTP_STATUS_SUCCESS_ACCEPTED);
+    expect(response.statusCode).toEqual(HTTP_STATUS_BAD_REQUEST);
   });
 
   it(`When payload body exists without correct order ID, it should returns 202 http status`, async () => {
