@@ -3,6 +3,7 @@ import GenericHandler from '../handlers/generic.handler.js';
 import { logger } from '../utils/logger.utils.js';
 import CustomError from '../errors/custom.error.js';
 import { HTTP_STATUS_BAD_REQUEST } from '../constants/http-status.constants.js';
+import { EMAIL_TEMPLATE_TYPES } from '../client/email-template.client.js';
 
 class CustomerRegistrationHandler extends GenericHandler {
   constructor() {
@@ -11,7 +12,7 @@ class CustomerRegistrationHandler extends GenericHandler {
 
   async process(messageBody) {
     const senderEmailAddress = process.env.SENDER_EMAIL_ADDRESS;
-    const templateId = process.env.CUSTOMER_REGISTRATION_TEMPLATE_ID;
+    const templateType = EMAIL_TEMPLATE_TYPES['create-account-confirmation'];
 
     const customerId = messageBody.resource.id;
     const customer = await getCustomerById(customerId);
@@ -31,7 +32,7 @@ class CustomerRegistrationHandler extends GenericHandler {
       await super.sendMail(
         senderEmailAddress,
         customer.email,
-        templateId,
+        templateType,
         customerDetails
       );
       logger.info(

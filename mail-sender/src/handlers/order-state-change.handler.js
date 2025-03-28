@@ -6,6 +6,7 @@ import { HTTP_STATUS_BAD_REQUEST } from '../constants/http-status.constants.js';
 import { convertMoneyToText } from '../utils/money.utils.js';
 import { addImageSizeSuffix } from '../utils/image.utils.js';
 import { IMAGE_SIZE_SMALL } from '../constants/image.constants.js';
+import { EMAIL_TEMPLATE_TYPES } from '../client/email-template.client.js';
 
 const DEFAULT_LOCALE = 'en-US';
 const DEFAULT_CUSTOMER_NAME = 'Customer';
@@ -17,7 +18,7 @@ class OrderStateChangeHandler extends GenericHandler {
   async process(messageBody) {
     logger.info(JSON.stringify(messageBody));
     const senderEmailAddress = process.env.SENDER_EMAIL_ADDRESS;
-    const templateId = process.env.ORDER_STATE_CHANGE_TEMPLATE_ID;
+    const templateType = EMAIL_TEMPLATE_TYPES['shipping-confirmation'];
 
     const orderId = messageBody.resource.id;
     const order = await getOrderById(orderId);
@@ -65,12 +66,12 @@ class OrderStateChangeHandler extends GenericHandler {
       };
 
       logger.info(
-        `Ready to send order state change email : customerEmail=${orderDetails.customerEmail}, orderNumber=${orderDetails.orderNumber}, customerMiddleName=${orderDetails.customerMiddleName}, customerCreationTime=${orderDetails.orderCreationTime}`
+        `Ready to send order state change email : orderNumber=${orderDetails.orderNumber}, customerEmail=${orderDetails.customerEmail}`
       );
       await super.sendMail(
         senderEmailAddress,
         orderDetails.customerEmail,
-        templateId,
+        templateType,
         orderDetails
       );
       logger.info(

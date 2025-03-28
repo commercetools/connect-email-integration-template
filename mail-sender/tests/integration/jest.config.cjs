@@ -5,4 +5,8 @@ module.exports = {
     testEnvironment: 'node',
     verbose: true,
     silent: true,
+    moduleDirectories: ['node_modules', 'src'],
+    moduleNameMapper: {
+        '^src/(.*)$': '<rootDir>/src/$1'
+    }
 };

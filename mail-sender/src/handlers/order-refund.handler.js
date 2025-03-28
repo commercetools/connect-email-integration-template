@@ -6,6 +6,7 @@ import { HTTP_STATUS_BAD_REQUEST } from '../constants/http-status.constants.js';
 import { convertMoneyToText } from '../utils/money.utils.js';
 import { addImageSizeSuffix } from '../utils/image.utils.js';
 import { IMAGE_SIZE_SMALL } from '../constants/image.constants.js';
+import { EMAIL_TEMPLATE_TYPES } from '../client/email-template.client.js';
 
 const DEFAULT_LOCALE = 'en-US';
 const DEFAULT_CUSTOMER_NAME = 'Customer';
@@ -14,30 +15,10 @@ class OrderRefundHandler extends GenericHandler {
     super();
   }
 
-  buildOrderDetails(order, customer, returnedLineItems) {
-    return {
-      orderNumber: order.orderNumber ? order.orderNumber : '',
-      customerEmail: order.customerEmail ? order.customerEmail : customer.email,
-      customerFirstName: customer?.firstName
-        ? customer.firstName
-        : DEFAULT_CUSTOMER_NAME,
-      customerMiddleName: customer?.middleName ? customer.middleName : '',
-      customerLastName: customer?.lastName ? customer.lastName : '',
-      orderCreationTime: order.createdAt,
-      orderState: order.orderState,
-      orderShipmentState: order.shipmentState,
-      orderTotalPrice: convertMoneyToText(order.totalPrice),
-      orderTaxedPrice: order.taxedPrice
-        ? convertMoneyToText(order.taxedPrice)
-        : '',
-      orderLineItems: returnedLineItems,
-    };
-  }
-
   async process(messageBody) {
     logger.info(JSON.stringify(messageBody));
     const senderEmailAddress = process.env.SENDER_EMAIL_ADDRESS;
-    const templateId = process.env.ORDER_REFUND_TEMPLATE_ID;
+    const templateType = EMAIL_TEMPLATE_TYPES['order-refund'];
 
     const orderId = messageBody.resource.id;
     const order = await getOrderById(orderId);
@@ -53,7 +34,6 @@ class OrderRefundHandler extends GenericHandler {
 
       for (const lineItem of order.lineItems) {
         if (returnedLineItemId.includes(lineItem.id)) {
-          // Rule out those line items which are not going to be returned.
           const item = {
             productName: lineItem.name[DEFAULT_LOCALE],
             productQuantity: lineItem.quantity,
@@ -69,30 +49,37 @@ class OrderRefundHandler extends GenericHandler {
           returnedLineItems.push(item);
         }
       }
-      if (returnedLineItems.length > 0) {
-        const orderDetails = this.buildOrderDetails(
-          order,
-          customer,
-          returnedLineItems
-        );
-        logger.info(
-          `Ready to send order state change email : customerEmail=${orderDetails.customerEmail}, orderNumber=${orderDetails.orderNumber}, customerMiddleName=${orderDetails.customerMiddleName}, customerCreationTime=${orderDetails.orderCreationTime}`
-        );
-        await super.sendMail(
-          senderEmailAddress,
-          orderDetails.customerEmail,
-          templateId,
-          orderDetails
-        );
-        logger.info(
-          `Order state change email has been sent to ${orderDetails.customerEmail}.`
-        );
-      } else {
-        throw new CustomError(
-          HTTP_STATUS_BAD_REQUEST,
-          `No returned line item is found for order ${orderId}`
-        );
-      }
+
+      const orderDetails = {
+        orderNumber: order.orderNumber ? order.orderNumber : '',
+        customerEmail: order.customerEmail
+          ? order.customerEmail
+          : customer.email,
+        customerFirstName: customer?.firstName
+          ? customer.firstName
+          : DEFAULT_CUSTOMER_NAME,
+        customerMiddleName: customer?.middleName ? customer.middleName : '',
+        customerLastName: customer?.lastName ? customer.lastName : '',
+        orderCreationTime: order.createdAt,
+        orderTotalPrice: convertMoneyToText(order.totalPrice),
+        orderTaxedPrice: order.taxedPrice
+          ? convertMoneyToText(order.taxedPrice)
+          : '',
+        orderLineItems: returnedLineItems,
+      };
+
+      logger.info(
+        `Ready to send order refund email : orderNumber=${orderDetails.orderNumber}, customerEmail=${orderDetails.customerEmail}`
+      );
+      await super.sendMail(
+        senderEmailAddress,
+        orderDetails.customerEmail,
+        templateType,
+        orderDetails
+      );
+      logger.info(
+        `Order refund email has been sent to ${orderDetails.customerEmail}.`
+      );
     } else if (!order) {
       throw new CustomError(
         HTTP_STATUS_BAD_REQUEST,

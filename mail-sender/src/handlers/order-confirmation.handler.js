@@ -6,6 +6,7 @@ import { HTTP_STATUS_BAD_REQUEST } from '../constants/http-status.constants.js';
 import { convertMoneyToText } from '../utils/money.utils.js';
 import { addImageSizeSuffix } from '../utils/image.utils.js';
 import { IMAGE_SIZE_SMALL } from '../constants/image.constants.js';
+import { EMAIL_TEMPLATE_TYPES } from '../client/email-template.client.js';
 
 const DEFAULT_LOCALE = 'en-US';
 const DEFAULT_CUSTOMER_NAME = 'Customer';
@@ -17,15 +18,18 @@ class OrderConfirmationHandler extends GenericHandler {
   async process(messageBody) {
     logger.info(JSON.stringify(messageBody));
     const senderEmailAddress = process.env.SENDER_EMAIL_ADDRESS;
-    const templateId = process.env.ORDER_CONFIRMATION_TEMPLATE_ID;
+    const templateType = EMAIL_TEMPLATE_TYPES['order-confirmation'];
 
     const orderId = messageBody.resource.id;
     const order = await getOrderById(orderId);
+    console.log('order', order);
     if (order) {
       let customer;
       if (order.customerId) {
         customer = await getCustomerById(order.customerId);
       }
+
+      console.log('customer', customer);
 
       const orderLineItems = [];
 
@@ -63,16 +67,16 @@ class OrderConfirmationHandler extends GenericHandler {
       };
 
       logger.info(
-        `Ready to send order confirmation email of customer registration : customerEmail=${orderDetails.customerEmail}, orderNumber=${orderDetails.orderNumber}, customerMiddleName=${orderDetails.customerMiddleName}, customerCreationTime=${orderDetails.orderCreationTime}`
+        `Ready to send order confirmation email : orderNumber=${orderDetails.orderNumber}, customerEmail=${orderDetails.customerEmail}`
       );
       await super.sendMail(
         senderEmailAddress,
         orderDetails.customerEmail,
-        templateId,
+        templateType,
         orderDetails
       );
       logger.info(
-        `Confirmation email of customer registration has been sent to ${orderDetails.customerEmail}.`
+        `Order confirmation email has been sent to ${orderDetails.customerEmail}.`
       );
     } else if (!order) {
       throw new CustomError(
