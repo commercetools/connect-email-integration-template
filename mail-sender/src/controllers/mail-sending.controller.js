@@ -31,10 +31,7 @@ import {
  * @param {Response} response The express response
  * @returns
  */
-export const messageHandler = async (request, response) => {
-  // Send ACCEPTED acknowledgement to Subscription
-  response.status(HTTP_STATUS_SUCCESS_ACCEPTED).send();
-
+export const messageHandler = async (request, response, next) => {
   try {
     // Check request body
     doValidation(request);
@@ -61,11 +58,13 @@ export const messageHandler = async (request, response) => {
       handler = handlerFactory.getHandler(HANDLER_TYPE_ORDER_REFUND);
     }
     await handler.process(messageBody);
+    response.status(HTTP_STATUS_SUCCESS_ACCEPTED).send();
   } catch (err) {
     if (err.statusCode !== HTTP_STATUS_SUCCESS_ACCEPTED) {
       logger.error(err);
     } else {
       logger.info(err);
     }
+    next(err);
   }
 };
