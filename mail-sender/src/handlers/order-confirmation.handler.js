@@ -34,8 +34,8 @@ class OrderConfirmationHandler extends GenericHandler {
         const item = {
           productName: lineItem.name[DEFAULT_LOCALE],
           productQuantity: lineItem.quantity,
-          productSku: lineItem.variant.sku,
-          productImage: lineItem.variant.images[0]
+          productSku: lineItem.variant?.sku || '',
+          productImage: lineItem.variant?.images?.length > 0
             ? addImageSizeSuffix(
                 lineItem.variant.images[0].url,
                 IMAGE_SIZE_SMALL

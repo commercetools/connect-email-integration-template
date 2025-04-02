@@ -15,7 +15,7 @@ export const mockOrder = {
     user: { typeId: 'user', id: 'f85221c7-b423-4d0b-958c-4d6632273d71' }
   },
   customerId: '34beb7b1-fd02-4e35-a821-0525dcb79936',
-  customerEmail: 'carolina.boninisalas@ariessolutions.io',
+  customerEmail: 'customer@example.com',
   customerGroup: {
     typeId: 'customer-group',
     id: '61fafb32-9b99-430b-a3a5-02a3466f2a5a'
@@ -112,19 +112,19 @@ export const mockOrder = {
     shippingMethodState: 'MatchesCart'
   },
   shippingAddress: {
-    id: 'qzRAUJPz',
-    firstName: 'Carolina',
-    lastName: 'Bonini',
-    streetName: 'Lincoln Road',
-    streetNumber: '1234',
-    postalCode: '33166',
-    city: 'Miami',
+    id: 'abc123xyz',
+    firstName: 'John',
+    lastName: 'Doe',
+    streetName: 'Main Street',
+    streetNumber: '5678',
+    postalCode: '10001',
+    city: 'New York',
     state: '',
     country: 'US',
-    company: 'Aries Solutions',
+    company: 'Example Company',
     apartment: '',
-    phone: '305 456-6247',
-    email: 'carolina.boninisalas@ariessolutions.io'
+    phone: '555-123-4567',
+    email: 'john.doe@example.com'
   },
   shipping: [],
   discountTypeCombination: { type: 'Stacking' },
@@ -133,9 +133,9 @@ export const mockOrder = {
       id: 'bad3c4e9-9009-4481-9c03-e646d1a81d60',
       productId: '64a8e5f5-8c1c-4ee4-afc5-28fcda445d3d',
       productKey: 'lip-1',
-      name: { en: 'Lipstick' },
+      name: { en: 'DEV DEV DEVLipstick' },
       productType: { typeId: 'product-type', id: '123' },
-      productSlug: { en: 'lipstick' },
+      productSlug: { en: 'DEV DEV DEV DEVlipstick' },
       variant: { id: 1 },
       price: {
         type: 'centPrecision',
@@ -196,18 +196,18 @@ export const mockOrder = {
   cart: { typeId: 'cart', id: '48255cbd-426e-4fea-b2a1-de3c08ce478b' },
   billingAddress: {
     id: 'qzRAUJPz',
-    firstName: 'Carolina',
-    lastName: 'Bonini',
-    streetName: 'Lincoln Road',
-    streetNumber: '1234',
-    postalCode: '33166',
-    city: 'Miami',
+    firstName: 'John',
+    lastName: 'Doe',
+    streetName: 'Main Street',
+    streetNumber: '5678',
+    postalCode: '10001',
+    city: 'New York',
     state: '',
     country: 'US',
-    company: 'Aries Solutions',
+    company: 'Example Company',
     apartment: '',
-    phone: '305 456-6247',
-    email: 'carolina.boninisalas@ariessolutions.io'
+    phone: '555-123-4567',
+    email: 'john.doe@example.com'
   },
   itemShippingAddresses: [],
   refusedGifts: []
