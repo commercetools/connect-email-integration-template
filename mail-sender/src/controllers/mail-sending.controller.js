@@ -40,9 +40,10 @@ export const messageHandler = async (request, response) => {
     doValidation(request);
 
     const encodedMessageBody = request.body.message.data;
-    const messageBody = decodeToJson(encodedMessageBody);
+    const messageBody = decodeToJson(encodedMessageBody); 
     const handlerFactory = new HandlerFactory();
     let handler;
+  
     if (isCustomerSubscriptionMessage(messageBody)) {
       handler = handlerFactory.getHandler(HANDLER_TYPE_CUSTOMER_REGISTRATION);
     } else if (isCustomerEmailTokenSubscriptionMessage(messageBody)) {
@@ -60,12 +61,13 @@ export const messageHandler = async (request, response) => {
     } else if (isOrderRefundMessage(messageBody)) {
       handler = handlerFactory.getHandler(HANDLER_TYPE_ORDER_REFUND);
     }
-    await handler.process(messageBody);
+
+    if (handler) {
+      await handler.process(messageBody);
+    }
   } catch (err) {
     if (err.statusCode !== HTTP_STATUS_SUCCESS_ACCEPTED) {
-      logger.error(err);
-    } else {
-      logger.info(err);
+      logger.error('Error processing message:', err);
     }
   }
 };

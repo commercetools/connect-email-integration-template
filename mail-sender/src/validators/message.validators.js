@@ -19,6 +19,7 @@ import {
   HTTP_STATUS_SUCCESS_ACCEPTED,
 } from '../constants/http-status.constants.js';
 import readConfiguration from '../utils/config.utils.js';
+import { logger } from '../utils/logger.utils.js';
 
 export function isSelfCreatedChange(messageBody) {
   const resourceModifiedBy = messageBody.createdBy?.clientId;
@@ -44,10 +45,12 @@ export function isOrderSubscriptionMessage(messageBody) {
 }
 
 export function isOrderConfirmationMessage(messageBody) {
-  return [
+  const validTypes = [
     ORDER_CREATION_SUBSCRIPTION_MESSAGE_TYPE,
     ORDER_IMPORT_SUBSCRIPTION_MESSAGE_TYPE,
-  ].includes(messageBody.type);
+  ];
+  const isValid = validTypes.includes(messageBody.type);
+  return isValid;
 }
 
 export function isOrderStateChangeMessage(messageBody) {

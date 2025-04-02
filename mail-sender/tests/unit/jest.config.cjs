@@ -5,4 +5,5 @@ module.exports = {
     testEnvironment: 'node',
     verbose: true,
     silent: true,
+    setupFiles: ['<rootDir>/tests/unit/jest.setup.js'],
 };

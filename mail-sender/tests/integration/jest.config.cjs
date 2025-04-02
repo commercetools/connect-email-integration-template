@@ -8,5 +8,7 @@ module.exports = {
     moduleDirectories: ['node_modules', 'src'],
     moduleNameMapper: {
         '^src/(.*)$': '<rootDir>/src/$1'
-    }
+    },
+    // Set test environment variables
+    setupFiles: ['<rootDir>/tests/integration/jest.setup.js']
 };
