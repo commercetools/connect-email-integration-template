@@ -29,7 +29,7 @@ The keys or identifiers of templates built in external email provider can be pro
  
 ## Getting started
 The template contains following module :  
-- Mail Sender: Receives message from commercetools project once there is an operation in customer or order as listed [here](./README.md#2-external-email-service-provider). The order and its corresponding cart details are then synchronized to the external tax provider for accounting and compliance purposes in addition to filing tax returns with tax authorities.
+- Mail Sender: Receives message from commercetools project once there is an operation in customer or order as listed [here](./README.md#2-external-email-service-provider). 
 
 Regarding the development of mail sender module, please refer to the following documentations:
 - [Development of Mail Sender](mail-sender/README.md)
@@ -43,7 +43,7 @@ Follow guidelines [here](https://docs.commercetools.com/connect/getting-started)
 
 ## Deployment Configuration
 In order to deploy your customized connector application on commercetools Connect, it needs to be published. For details, please refer to [documentation about commercetools Connect](https://docs.commercetools.com/connect/concepts)
-In addition, in order to support connect, the tax integration connector template has a folder structure as listed below
+In addition, in order to support connect, the email integration connector template has a folder structure as listed below
 ```
 ├── mail-sender
 │   ├── src
@@ -110,4 +110,4 @@ Here you can see the details about various variables in configuration
 
 ## Recommendations
 #### Implement your own test cases
-We have provided sample unit and integration test cases with [sinon](https://sinonjs.org/), [Jest](https://jestjs.io/) and [supertest](https://github.com/ladjs/supertest#readme). The implementation is under `test` folder in both `tax-calculator` and `order-syncer` modules. It is recommended to implement further test cases based on your own needs to test your development. 
+We have provided sample unit and integration test cases with [sinon](https://sinonjs.org/), [Jest](https://jestjs.io/) and [supertest](https://github.com/ladjs/supertest#readme). The implementation is under `test` folder in `mail-sender` module. It is recommended to implement further test cases based on your own needs to test your development.
