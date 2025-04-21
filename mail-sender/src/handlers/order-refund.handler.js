@@ -50,35 +50,39 @@ class OrderRefundHandler extends GenericHandler {
         }
       }
 
-      const orderDetails = {
-        orderNumber: order.orderNumber ? order.orderNumber : '',
-        customerEmail: order.customerEmail
-          ? order.customerEmail
-          : customer.email,
-        customerFirstName: customer?.firstName
-          ? customer.firstName
-          : DEFAULT_CUSTOMER_NAME,
-        customerMiddleName: customer?.middleName ? customer.middleName : '',
-        customerLastName: customer?.lastName ? customer.lastName : '',
-        orderCreationTime: order.createdAt,
-        orderTotalPrice: convertMoneyToText(order.totalPrice),
-        orderTaxedPrice: order.taxedPrice
-          ? convertMoneyToText(order.taxedPrice)
-          : '',
-        orderLineItems: returnedLineItems,
+      const templateData = {
+        order: {
+          ...order,
+          orderNumber: order.orderNumber || '',
+          orderId: order.id,
+          orderCreationTime: order.createdAt,
+          orderTotalPrice: convertMoneyToText(order.totalPrice),
+          orderTaxedPrice: order.taxedPrice ? convertMoneyToText(order.taxedPrice) : '',
+          orderState: order.orderState,
+          orderShipmentState: order.shipmentState,
+          orderLineItems: returnedLineItems,
+        },
+        customer: customer ? {
+          ...customer,
+          customerEmail: customer.email,
+          customerNumber: customer.customerNumber || '',
+          customerFirstName: customer.firstName || '',
+          customerMiddleName: customer.middleName || '',
+          customerLastName: customer.lastName || '',
+        } : null
       };
 
       logger.info(
-        `Ready to send order refund email : orderNumber=${orderDetails.orderNumber}, customerEmail=${orderDetails.customerEmail}`
+        `Ready to send order refund email : orderNumber=${templateData.order.orderNumber}, customerEmail=${templateData.customer?.customerEmail}`
       );
       await super.sendMail(
         senderEmailAddress,
-        orderDetails.customerEmail,
+        templateData.customer?.customerEmail || order.customerEmail,
         templateType,
-        orderDetails
+        templateData
       );
       logger.info(
-        `Order refund email has been sent to ${orderDetails.customerEmail}.`
+        `Order refund email has been sent to ${templateData.customer?.customerEmail || order.customerEmail}.`
       );
     } else if (!order) {
       throw new CustomError(

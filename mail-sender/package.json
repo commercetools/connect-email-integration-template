@@ -35,12 +35,15 @@
     "@commercetools/sdk-client-v2": "^2.5.0",
     "body-parser": "^1.20.2",
     "dotenv": "^16.4.5",
+    "easy-email-core": "^4.16.1",
     "editorjs-html": "^4.0.5",
     "express": "^4.19.2",
+    "mjml": "^4.15.3",
     "mocha": "^10.6.0",
     "nodemailer": "^6.10.0",
     "sinon": "^18.0.0",
     "supertest": "^6.3.4",
     "validator": "^13.12.0"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

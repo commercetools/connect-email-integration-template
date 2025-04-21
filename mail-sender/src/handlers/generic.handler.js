@@ -3,8 +3,8 @@ import { HTTP_STATUS_SERVER_ERROR } from '../constants/http-status.constants.js'
 import { logger } from '../utils/logger.utils.js';
 import { getEmailTemplateByType } from '../client/email-template.client.js';
 import { EmailServiceFactory } from '../services/email/email.service.factory.js';
-import { EditorJSEmailParser } from '../services/email/parsers/editorjs-email.parser.js';
 import { SimpleEmailParser } from '../services/email/parsers/simple-email.parser.js';
+import { MJMLEmailParser } from '../services/email/parsers/mjml-email.parser.js';
 
 class GenericHandler {
   constructor() {
@@ -29,27 +29,19 @@ class GenericHandler {
     templateType,
     templateData
   ) {
-    logger.info(`senderEmailAddress: ${senderEmailAddress}`);
-    logger.info(`recipientEmailAddress: ${recipientEmailAddress}`);
-    logger.info(`templateType: ${templateType}`);
-    logger.info(`templateData: ${JSON.stringify(templateData, null, 2)}`);
-
     try {
       // Ensure email service is initialized
       const emailService = await this.initializeEmailService();
 
       // Fetch the email template from commerceTools Custom Objects
       const emailTemplate = await getEmailTemplateByType(templateType);
-      
-      // Parse the EditorJS template to HTML and replace variables
-      const parsedBody = EditorJSEmailParser.parse(emailTemplate.body, templateData);
-      
+      const parsedBody = MJMLEmailParser.parse(emailTemplate.body, templateData);
       // Parse the subject line with simple variable substitution
       const parsedSubject = SimpleEmailParser.parse(emailTemplate.subject, templateData);
       
-      // For now, we'll just log the template
-      logger.info('Email template:', emailTemplate);
+
       
+
       // Send email using the email service
       await emailService.sendEmail({
         from: senderEmailAddress,

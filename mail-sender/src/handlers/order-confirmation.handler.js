@@ -9,7 +9,6 @@ import { IMAGE_SIZE_SMALL } from '../constants/image.constants.js';
 import { EMAIL_TEMPLATE_TYPES } from '../client/email-template.client.js';
 
 const DEFAULT_LOCALE = 'en-US';
-const DEFAULT_CUSTOMER_NAME = 'Customer';
 class OrderConfirmationHandler extends GenericHandler {
   constructor() {
     super();
@@ -45,35 +44,40 @@ class OrderConfirmationHandler extends GenericHandler {
         };
         orderLineItems.push(item);
       }
-      const orderDetails = {
-        orderNumber: order.orderNumber ? order.orderNumber : '',
-        customerEmail: order.customerEmail
-          ? order.customerEmail
-          : customer.email,
-        customerFirstName: customer?.firstName
-          ? customer.firstName
-          : DEFAULT_CUSTOMER_NAME,
-        customerMiddleName: customer?.middleName ? customer.middleName : '',
-        customerLastName: customer?.lastName ? customer.lastName : '',
-        orderCreationTime: order.createdAt,
-        orderTotalPrice: convertMoneyToText(order.totalPrice),
-        orderTaxedPrice: order.taxedPrice
-          ? convertMoneyToText(order.taxedPrice)
-          : '',
-        orderLineItems,
+
+      const templateData = {
+        order: {
+          ...order,
+          orderNumber: order.orderNumber || '',
+          orderId: order.id,
+          orderCreationTime: order.createdAt,
+          orderTotalPrice: convertMoneyToText(order.totalPrice),
+          orderTaxedPrice: order.taxedPrice ? convertMoneyToText(order.taxedPrice) : '',
+          orderState: order.orderState,
+          orderShipmentState: order.shipmentState,
+          orderLineItems: orderLineItems,
+        },
+        customer: customer ? {
+          ...customer,
+          customerEmail: customer.email,
+          customerNumber: customer.customerNumber || '',
+          customerFirstName: customer.firstName || '',
+          customerMiddleName: customer.middleName || '',
+          customerLastName: customer.lastName || '',
+        } : null
       };
 
       logger.info(
-        `Ready to send order confirmation email : orderNumber=${orderDetails.orderNumber}, customerEmail=${orderDetails.customerEmail}`
+        `Ready to send order confirmation email : orderNumber=${templateData.order.orderNumber}, customerEmail=${templateData.customer?.customerEmail}`
       );
       await super.sendMail(
         senderEmailAddress,
-        orderDetails.customerEmail,
+        templateData.customer?.customerEmail || order.customerEmail,
         templateType,
-        orderDetails
+        templateData
       );
       logger.info(
-        `Order confirmation email has been sent to ${orderDetails.customerEmail}.`
+        `Order confirmation email has been sent to ${templateData.customer?.customerEmail || order.customerEmail}.`
       );
     } else if (!order) {
       throw new CustomError(

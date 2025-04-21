@@ -42,28 +42,35 @@ class CustomerPasswordTokenCreationHandler extends GenericHandler {
           generateTokenResult.expiresAt
         );
       }
-      const customerDetails = {
-        customerEmail: customer.email,
-        customerNumber: customer.customerNumber ? customer.customerNumber : '',
-        customerFirstName: customer.firstName ? customer.firstName : '',
-        customerMiddleName: customer.middleName ? customer.middleName : '',
-        customerLastName: customer.lastName ? customer.lastName : '',
-        customerCreationTime: customer.createdAt,
-        customerPasswordToken: generateTokenResult.value,
-        customerPasswordTokenValidity: tokenValidityInMinute,
+      
+      // Estructurar los datos de manera más organizada, pero manteniendo toda la data original
+      const templateData = {
+        // Incluir el objeto customer completo para que los usuarios tengan acceso a todas sus propiedades
+        customer: {
+          ...customer,
+          // Agregar propiedades formateadas para facilitar su uso en templates
+          customerEmail: customer.email,
+          customerNumber: customer.customerNumber || '',
+          customerFirstName: customer.firstName || '',
+          customerMiddleName: customer.middleName || '',
+          customerLastName: customer.lastName || '',
+          customerCreationTime: customer.createdAt,
+          customerPasswordToken: generateTokenResult.value,
+          customerPasswordTokenValidity: tokenValidityInMinute,
+        }
       };
 
       logger.info(
-        `Ready to send password reset email : customerEmail=${customerDetails.customerEmail}, customerNumber=${customerDetails.customerNumber}, customerCreationTime=${customerDetails.customerCreationTime} `
+        `Ready to send password reset email : customerEmail=${templateData.customer.customerEmail}, customerNumber=${templateData.customer.customerNumber}, customerCreationTime=${templateData.customer.customerCreationTime}`
       );
       await super.sendMail(
         senderEmailAddress,
         customer.email,
         templateType,
-        customerDetails
+        templateData
       );
       logger.info(
-        `Password reset email has been sent to ${customerDetails.customerEmail}.`
+        `Password reset email has been sent to ${templateData.customer.customerEmail}.`
       );
     } else {
       throw new CustomError(

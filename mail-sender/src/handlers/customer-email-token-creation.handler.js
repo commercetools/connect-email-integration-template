@@ -32,27 +32,31 @@ class CustomerEmailTokenCreationHandler extends GenericHandler {
     );
 
     if (generateTokenResult) {
-      const customerDetails = {
-        customerEmail: customer.email,
-        customerNumber: customer.customerNumber ? customer.customerNumber : '',
-        customerFirstName: customer.firstName ? customer.firstName : '',
-        customerMiddleName: customer.middleName ? customer.middleName : '',
-        customerLastName: customer.lastName ? customer.lastName : '',
-        customerCreationTime: customer.createdAt,
-        customerEmailToken: generateTokenResult.value,
-        customerEmailTokenValidity: tokenValidityInMinute,
+      const templateData = {
+        customer: {
+          ...customer,
+          customerEmail: customer.email,
+          customerNumber: customer.customerNumber || '',
+          customerFirstName: customer.firstName || '',
+          customerMiddleName: customer.middleName || '',
+          customerLastName: customer.lastName || '',
+          customerCreationTime: customer.createdAt,
+          customerEmailToken: generateTokenResult.value,
+          customerEmailTokenValidity: tokenValidityInMinute,
+        }
       };
+
       logger.info(
-        `Ready to send verification email of customer email token creation : customerEmail=${customerDetails.customerEmail}, customerNumber=${customerDetails.customerNumber}, customerCreationTime=${customerDetails.customerCreationTime} `
+        `Ready to send verification email of customer email token creation : customerEmail=${templateData.customer.customerEmail}, customerNumber=${templateData.customer.customerNumber}, customerCreationTime=${templateData.customer.customerCreationTime}`
       );
       await super.sendMail(
         senderEmailAddress,
         customer.email,
         templateType,
-        customerDetails
+        templateData
       );
       logger.info(
-        `Verification email of customer email token has been sent to ${customerDetails.customerEmail}.`
+        `Verification email of customer email token has been sent to ${templateData.customer.customerEmail}.`
       );
     } else {
       throw new CustomError(

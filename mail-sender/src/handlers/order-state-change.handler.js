@@ -45,37 +45,45 @@ class OrderStateChangeHandler extends GenericHandler {
         };
         orderLineItems.push(item);
       }
-      const orderDetails = {
-        orderNumber: order.orderNumber ? order.orderNumber : '',
-        customerEmail: order.customerEmail
-          ? order.customerEmail
-          : customer.email,
-        customerFirstName: customer?.firstName
-          ? customer.firstName
-          : DEFAULT_CUSTOMER_NAME,
-        customerMiddleName: customer?.middleName ? customer.middleName : '',
-        customerLastName: customer?.lastName ? customer.lastName : '',
-        orderCreationTime: order.createdAt,
-        orderState: order.orderState,
-        orderShipmentState: order.shipmentState,
-        orderTotalPrice: convertMoneyToText(order.totalPrice),
-        orderTaxedPrice: order.taxedPrice
-          ? convertMoneyToText(order.taxedPrice)
-          : '',
-        orderLineItems,
+      
+      // Estructurar los datos de manera más organizada, pero manteniendo toda la data original
+      const templateData = {
+        // Incluir el objeto order completo para que los usuarios tengan acceso a todas sus propiedades
+        order: {
+          ...order,
+          // Agregar propiedades formateadas para facilitar su uso en templates
+          orderNumber: order.orderNumber || '',
+          orderId: order.id,
+          orderCreationTime: order.createdAt,
+          orderTotalPrice: convertMoneyToText(order.totalPrice),
+          orderTaxedPrice: order.taxedPrice ? convertMoneyToText(order.taxedPrice) : '',
+          orderState: order.orderState,
+          orderShipmentState: order.shipmentState,
+          orderLineItems: orderLineItems,
+        },
+        // Incluir el objeto customer completo si existe
+        customer: customer ? {
+          ...customer,
+          // Agregar propiedades formateadas para facilitar su uso en templates
+          customerEmail: customer.email,
+          customerNumber: customer.customerNumber || '',
+          customerFirstName: customer.firstName || '',
+          customerMiddleName: customer.middleName || '',
+          customerLastName: customer.lastName || '',
+        } : null
       };
 
       logger.info(
-        `Ready to send order state change email : orderNumber=${orderDetails.orderNumber}, customerEmail=${orderDetails.customerEmail}`
+        `Ready to send order state change email : orderNumber=${templateData.order.orderNumber}, customerEmail=${templateData.customer?.customerEmail}`
       );
       await super.sendMail(
         senderEmailAddress,
-        orderDetails.customerEmail,
+        templateData.customer?.customerEmail || order.customerEmail,
         templateType,
-        orderDetails
+        templateData
       );
       logger.info(
-        `Order state change email has been sent to ${orderDetails.customerEmail}.`
+        `Order state change email has been sent to ${templateData.customer?.customerEmail || order.customerEmail}.`
       );
     } else if (!order) {
       throw new CustomError(

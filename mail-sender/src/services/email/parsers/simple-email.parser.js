@@ -12,13 +12,13 @@ export class SimpleEmailParser {
 
     let processedContent = content;
 
-    // Replace simple variables like {orderNumber}
-    processedContent = processedContent.replace(/\{(\w+)\}/g, (match, key) => {
+    // Replace simple variables like {{orderNumber}}
+    processedContent = processedContent.replace(/\{\{(\w+)\}\}/g, (match, key) => {
       return templateData[key] || '';
     });
 
-    // Replace nested variables like {order.totalPrice.centAmount}
-    processedContent = processedContent.replace(/\{(\w+)(\.\w+)*\}/g, (match, ...keys) => {
+    // Replace nested variables like {{order.totalPrice.centAmount}}
+    processedContent = processedContent.replace(/\{\{(\w+)(\.\w+)*\}\}/g, (match, ...keys) => {
       let value = templateData;
       for (const key of keys) {
         if (value && typeof value === 'object') {
