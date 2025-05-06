@@ -11,19 +11,19 @@ describe('mail-sending.controller.spec', () => {
   });
 
   it(`should return 202 HTTP status when message data is missing in incoming event message.`, async () => {
-
     const dummyConfig = {
-      
-        clientId: 'dummy-ctp-client-id',
-        clientSecret: 'dummy-ctp-client-secret',
-        projectKey: 'dummy-ctp-project-key',
-        scope: 'dummy-ctp-scope',
-        region: 'dummy-ctp-region'
+      clientId: 'dummy-ctp-client-id',
+      clientSecret: 'dummy-ctp-client-secret',
+      projectKey: 'dummy-ctp-project-key',
+      scope: 'dummy-ctp-scope',
+      region: 'dummy-ctp-region',
     };
 
     sinon.stub(configUtils, 'default').returns(dummyConfig);
-    const { messageHandler } = await import('../../src/controllers/mail-sending.controller.js');
-    
+    const { messageHandler } = await import(
+      '../../src/controllers/mail-sending.controller.js'
+    );
+
     const mockRequest = {
       method: 'POST',
       url: '/',
