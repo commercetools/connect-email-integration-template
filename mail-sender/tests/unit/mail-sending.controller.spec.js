@@ -1,9 +1,9 @@
 import { expect, describe, it, afterEach } from '@jest/globals';
 
 import sinon from 'sinon';
-import { messageHandler } from '../../src/controllers/mail-sending.controller.js';
 import { HTTP_STATUS_SUCCESS_ACCEPTED } from '../../src/constants/http-status.constants.js';
-import * as ConfigUtil from '../../src/utils/config.utils.js';
+// import readConfiguration from '../../src/utils/config.utils.js';
+import * as configUtils from '../../src/utils/config.utils.js'; // Import as a namespace
 
 describe('mail-sending.controller.spec', () => {
   afterEach(() => {
@@ -19,9 +19,11 @@ describe('mail-sending.controller.spec', () => {
       region: 'dummy-ctp-region',
     };
 
-    sinon.stub(ConfigUtil, 'default').callsFake(() => {
-      return dummyConfig;
-    });
+    sinon.stub(configUtils, 'default').returns(dummyConfig);
+    const { messageHandler } = await import(
+      '../../src/controllers/mail-sending.controller.js'
+    );
+
     const mockRequest = {
       method: 'POST',
       url: '/',
