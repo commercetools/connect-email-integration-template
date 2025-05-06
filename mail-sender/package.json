@@ -34,7 +34,7 @@
     "@commercetools/sdk-client-v2": "^2.5.0",
     "body-parser": "^1.20.2",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "express": "^4.21.0",
     "mocha": "^10.7.3",
     "sinon": "^18.0.0",
     "supertest": "^7.0.0",
