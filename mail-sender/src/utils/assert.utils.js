@@ -11,3 +11,10 @@ export function assertError(value, message) {
 export function assertString(value, message) {
   assert(typeof value === 'string', message ?? 'Invalid string value');
 }
+
+export function assertNonNullable(value, message) {
+  assert(
+    value !== undefined && value !== null && value !== '',
+    message ?? 'Value must not be null or undefined'
+  );
+}
