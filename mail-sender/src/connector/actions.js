@@ -47,15 +47,24 @@ function buildDestination(config) {
 
   switch (config.connectSubscriptionDestination) {
     case 'GCP':
-      assertNonNullable(config.connectGcpTopicName, 'CONNECT_GCP_TOPIC_NAME is required for GCP destination');
-      assertNonNullable(config.connectGcpProjectId, 'CONNECT_GCP_PROJECT_ID is required for GCP destination');
+      assertNonNullable(
+        config.connectGcpTopicName,
+        'CONNECT_GCP_TOPIC_NAME is required for GCP destination'
+      );
+      assertNonNullable(
+        config.connectGcpProjectId,
+        'CONNECT_GCP_PROJECT_ID is required for GCP destination'
+      );
       return {
         type: 'GoogleCloudPubSub',
         topic: config.connectGcpTopicName,
         projectId: config.connectGcpProjectId,
       };
     case 'SNS':
-      assertNonNullable(config.connectAwsTopicArn, 'CONNECT_AWS_TOPIC_ARN is required for SNS destination');
+      assertNonNullable(
+        config.connectAwsTopicArn,
+        'CONNECT_AWS_TOPIC_ARN is required for SNS destination'
+      );
       return {
         type: 'SNS',
         topicArn: config.connectAwsTopicArn,
