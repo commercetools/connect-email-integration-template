@@ -46,7 +46,7 @@ function buildDestination(config) {
   );
 
   switch (config.connectSubscriptionDestination) {
-    case 'GCP':
+    case 'GoogleCloudPubSub':
       assertNonNullable(
         config.connectGcpTopicName,
         'CONNECT_GCP_TOPIC_NAME is required for GCP destination'
@@ -72,7 +72,7 @@ function buildDestination(config) {
       };
     default:
       throw new Error(
-        `Unsupported subscription destination: ${config.connectSubscriptionDestination}. Valid options are 'GCP' or 'SNS'.`
+        `Unsupported subscription destination: ${config.connectSubscriptionDestination}. Valid options are 'GoogleCloudPubSub' or 'SNS'.`
       );
   }
 }
@@ -88,33 +88,6 @@ export async function createSubscription(apiRoot, config) {
       body: {
         key: EMAIL_DELIVERY_SUBSCRIPTION_KEY,
         destination,
-        messages: [
-          buildCustomerChangeMessageType(),
-          buildCustomerEmailTokenChangeMessageType(),
-          buildCustomerPasswordTokenChangeMessageType(),
-          buildOrderChangeMessageType(),
-        ],
-      },
-    })
-    .execute();
-}
-
-export async function createEmailDeliverySubscripition(
-  apiRoot,
-  topicName,
-  projectId
-) {
-  await deleteEmailDeliverySubscription(apiRoot);
-  await apiRoot
-    .subscriptions()
-    .post({
-      body: {
-        key: EMAIL_DELIVERY_SUBSCRIPTION_KEY,
-        destination: {
-          type: 'GoogleCloudPubSub',
-          topic: topicName,
-          projectId,
-        },
         messages: [
           buildCustomerChangeMessageType(),
           buildCustomerEmailTokenChangeMessageType(),
