@@ -14,7 +14,7 @@ export function assertString(value, message) {
 
 export function assertNonNullable(value, message) {
   assert(
-    value !== undefined && value !== null && value !== '',
+    value !== undefined && value !== null,
     message ?? 'Value must not be null or undefined'
   );
 }
